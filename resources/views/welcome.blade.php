@@ -15,7 +15,7 @@
     <body class="antialiased">
 
     <div id="app">
-        <example-component></example-component>
+        <router-view></router-view>
     </div>
 
     @vite('resources/js/app.js')
