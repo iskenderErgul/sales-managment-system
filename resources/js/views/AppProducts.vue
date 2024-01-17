@@ -35,8 +35,8 @@
                         {{formatCurrency(slotProps.data.price)}}
                     </template>
                 </Column>
-                <Column field="quantity" header="Quantity" sortable style="min-width:10rem"></Column>
-                <Column field="category" header="Category" sortable style="min-width:10rem"></Column>
+                <Column field="stock_quantity" header="Quantity" sortable style="min-width:10rem"></Column>
+                <Column field="category_id" header="Category" sortable style="min-width:10rem"></Column>
 
 
                 <Column :exportable="false" style="min-width:8rem">
@@ -124,7 +124,8 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import {onMounted, ref} from 'vue';
+import axios from "axios";
 import { FilterMatchMode } from 'primevue/api';
 
 import DataTable from 'primevue/datatable';
@@ -134,8 +135,6 @@ import Button from 'primevue/button';
 import Toolbar from 'primevue/toolbar';
 import Dialog from 'primevue/dialog';
 import RadioButton from 'primevue/radiobutton';
-import Dropdown from 'primevue/dropdown';
-import Tag from 'primevue/tag';
 import FileUpload from 'primevue/fileupload';
 import InputNumber from 'primevue/inputnumber';
 import InputText from 'primevue/inputtext';
@@ -148,45 +147,7 @@ import InputText from 'primevue/inputtext';
 
 
 const dt = ref();
-const products = ref([
-    {
-        id: 1,
-        code: 'P001',
-        name: 'Product A',
-        description: 'Description for Product A',
-        image: 'https://picsum.photos/300/300',
-        price: 99.99,
-        quantity: 50,
-        category: 'Accessories',
-        rating: 4,
-
-    },
-    {
-        id: 2,
-        code: 'P002',
-        name: 'Product B',
-        description: 'Description for Product B',
-        image: 'https://picsum.photos/300/300',
-        price: 49.99,
-        quantity: 30,
-        category: 'Clothing',
-        rating: 3,
-
-    },
-    {
-        id: 3,
-        code: 'P003',
-        name: 'Product C',
-        description: 'Description for Product C',
-        image: 'https://picsum.photos/300/300',
-        price: 29.99,
-        quantity: 20,
-        category: 'Electronics',
-        rating: 5,
-
-    },
-    // Daha fazla ürün ekleyebilirsiniz
-]);
+const products = ref([]);
 const productDialog = ref(false);
 const deleteProductDialog = ref(false);
 const deleteProductsDialog = ref(false);
@@ -196,6 +157,19 @@ const filters = ref({
     'global': {value: null, matchMode: FilterMatchMode.CONTAINS},
 });
 const submitted = ref(false);
+
+
+
+onMounted(async () => {
+    try {
+        const response = await axios.get('http://127.0.0.1:8000/api/getProducts');
+        products.value = response.data
+    } catch (error) {
+        console.error('Axios Request Error:', error);
+    }
+});
+
+
 
 
 const formatCurrency = (value) => {
@@ -267,7 +241,6 @@ const createId = () => {
     }
     return id;
 }
-
 const exportCSV = () => {
     dt.value.exportCSV();
 };
@@ -284,3 +257,4 @@ const deleteSelectedProducts = () => {
 
 
 </script>
+
