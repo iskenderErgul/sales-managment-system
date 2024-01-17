@@ -1,7 +1,118 @@
 @import './layout/layout.scss';
-@import "../../../public/themes/vela-green/theme.css";
 
 @import 'primevue/resources/primevue.css';
 @import 'primeflex/primeflex.scss';
 @import 'primeicons/primeicons.css';
 
+
+@import "../../../public/themes/vela-green/theme.css";
+
+
+
+
+
+
+
+
+
+//
+//@import "../../../public/themes/bootstrap4-light-blue/theme.css";
+//@import "../../../public/themes/bootstrap4-light-purple/theme.css";
+//@import "../../../public/themes/bootstrap4-dark-blue/theme.css";
+//@import "../../../public/themes/bootstrap4-dark-purple/theme.css";
+//
+///* Material Design Themes */
+//@import "../../../public/themes/md-light-indigo/theme.css";
+//@import "../../../public/themes/md-light-deeppurple/theme.css";
+//@import "../../../public/themes/md-dark-indigo/theme.css";
+//@import "../../../public/themes/md-dark-deeppurple/theme.css";
+//
+///* Material Design Compact Themes */
+//@import "../../../public/themes/mdc-light-indigo/theme.css";
+//@import "../../../public/themes/mdc-light-deeppurple/theme.css";
+//@import "../../../public/themes/mdc-dark-indigo/theme.css";
+//@import "../../../public/themes/mdc-dark-deeppurple/theme.css";
+//
+///* Fluent Theme */
+//@import "../../../public/themes/fluent-light/theme.css";
+//
+///* Lara Themes */
+//@import "../../../public/themes/lara-light-blue/theme.css";
+//@import "../../../public/themes/lara-light-indigo/theme.css";
+//@import "../../../public/themes/lara-light-purple/theme.css";
+//@import "../../../public/themes/lara-light-teal/theme.css";
+//
+//@import "../../../public/themes/lara-dark-blue/theme.css";
+//@import "../../../public/themes/lara-dark-indigo/theme.css";
+//@import "../../../public/themes/lara-dark-purple/theme.css";
+//@import "../../../public/themes/lara-dark-teal/theme.css";
+//
+//
+///* Saga Themes */
+//@import "../../../public/themes/saga-blue/theme.css";
+//@import "../../../public/themes/saga-green/theme.css";
+//@import "../../../public/themes/saga-orange/theme.css";
+//@import "../../../public/themes/saga-purple/theme.css";
+//
+///* Vela Themes */
+//@import "../../../public/themes/vela-blue/theme.css";
+//@import "../../../public/themes/vela-green/theme.css";
+//@import "../../../public/themes/vela-orange/theme.css";
+//@import "../../../public/themes/vela-purple/theme.css";
+//
+///* Arya Themes */
+//@import "../../../public/themes/arya-blue/theme.css";
+//@import "../../../public/themes/arya-green/theme.css";
+//@import "../../../public/themes/arya-orange/theme.css";
+//@import "../../../public/themes/arya-purple/theme.css";
+///* Import PrimeVue themes dynamically */
+//
+///* Bootstrap 4 Themes */
+//@import "../../../public/themes/bootstrap4-light-blue/theme.css";
+//@import "../../../public/themes/bootstrap4-light-purple/theme.css";
+//@import "../../../public/themes/bootstrap4-dark-blue/theme.css";
+//@import "../../../public/themes/bootstrap4-dark-purple/theme.css";
+//
+///* Material Design Themes */
+//@import "../../../public/themes/md-light-indigo/theme.css";
+//@import "../../../public/themes/md-light-deeppurple/theme.css";
+//@import "../../../public/themes/md-dark-indigo/theme.css";
+//@import "../../../public/themes/md-dark-deeppurple/theme.css";
+//
+///* Material Design Compact Themes */
+//@import "../../../public/themes/mdc-light-indigo/theme.css";
+//@import "../../../public/themes/mdc-light-deeppurple/theme.css";
+//@import "../../../public/themes/mdc-dark-indigo/theme.css";
+//@import "../../../public/themes/mdc-dark-deeppurple/theme.css";
+//
+///* Fluent Theme */
+//@import "../../../public/themes/fluent-light/theme.css";
+//
+///* Lara Themes */
+//@import "../../../public/themes/lara-light-blue/theme.css";
+//@import "../../../public/themes/lara-light-indigo/theme.css";
+//@import "../../../public/themes/lara-light-purple/theme.css";
+//@import "../../../public/themes/lara-light-teal/theme.css";
+//
+//@import "../../../public/themes/lara-dark-blue/theme.css";
+//@import "../../../public/themes/lara-dark-indigo/theme.css";
+//@import "../../../public/themes/lara-dark-purple/theme.css";
+//@import "../../../public/themes/lara-dark-teal/theme.css";
+//
+///* Saga Themes */
+//@import "../../../public/themes/saga-blue/theme.css";
+//@import "../../../public/themes/saga-green/theme.css";
+//@import "../../../public/themes/saga-orange/theme.css";
+//@import "../../../public/themes/saga-purple/theme.css";
+//
+///* Vela Themes */
+//@import "../../../public/themes/vela-blue/theme.css";
+//@import "../../../public/themes/vela-green/theme.css";
+//@import "../../../public/themes/vela-orange/theme.css";
+//@import "../../../public/themes/vela-purple/theme.css";
+//
+///* Arya Themes */
+//@import "../../../public/themes/arya-blue/theme.css";
+//@import "../../../public/themes/arya-green/theme.css";
+//@import "../../../public/themes/arya-orange/theme.css";
+//@import "../../../public/themes/arya-purple/theme.css";

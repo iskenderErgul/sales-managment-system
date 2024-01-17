@@ -11,6 +11,6 @@ import HomeView from "@/views/HomeView.vue";
 const app = createApp({});
 app.component(HomeView)
 app.use(router)
-app.use(PrimeVue)
+app.use(PrimeVue, { ripple: true });
 
 app.mount('#app');
