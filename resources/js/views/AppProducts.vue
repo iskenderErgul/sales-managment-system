@@ -36,7 +36,7 @@
                     </template>
                 </Column>
                 <Column field="stock_quantity" header="Quantity" sortable style="min-width:10rem"></Column>
-                <Column field="category_id" header="Category" sortable style="min-width:10rem"></Column>
+                <Column field="categoryName" header="Category" sortable style="min-width:10rem"></Column>
 
 
                 <Column :exportable="false" style="min-width:8rem">
@@ -64,21 +64,9 @@
             <div class="field">
                 <label class="mb-3">Category</label>
                 <div class="formgrid grid">
-                    <div class="field-radiobutton col-6">
-                        <RadioButton id="category1" name="category" value="Accessories" v-model="product.category" />
-                        <label for="category1">Accessories</label>
-                    </div>
-                    <div class="field-radiobutton col-6">
-                        <RadioButton id="category2" name="category" value="Clothing" v-model="product.category" />
-                        <label for="category2">Clothing</label>
-                    </div>
-                    <div class="field-radiobutton col-6">
-                        <RadioButton id="category3" name="category" value="Electronics" v-model="product.category" />
-                        <label for="category3">Electronics</label>
-                    </div>
-                    <div class="field-radiobutton col-6">
-                        <RadioButton id="category4" name="category" value="Fitness" v-model="product.category" />
-                        <label for="category4">Fitness</label>
+                    <div v-for="category in categories" :key="category.id" class="field-radiobutton col-6">
+                        <RadioButton :id="`category${category.id}`" name="category" :value="category.name" v-model="product.category" />
+                        <label :for="`category${category.id}`">{{ category.name }}</label>
                     </div>
                 </div>
             </div>
@@ -110,14 +98,14 @@
             </template>
         </Dialog>
 
-        <Dialog v-model:visible="deleteProductsDialog" :style="{width: '450px'}" header="Confirm" :modal="true">
+        <Dialog v-model:visible="deleteProductsDialog" @confirm="confirmAction" :style="{width: '450px'}" header="Confirm" :modal="true">
             <div class="confirmation-content">
                 <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem" />
                 <span v-if="product">Are you sure you want to delete the selected products?</span>
             </div>
             <template #footer>
-                <Button label="No" icon="pi pi-times" text @click="deleteProductsDialog = false"/>
-                <Button label="Yes" icon="pi pi-check" text @click="deleteSelectedProducts" />
+                <Button ref="noButton" label="No" icon="pi pi-times" text @click="deleteProductsDialog = false"/>
+                <Button ref="yesButton" label="Yes" icon="pi pi-check" text @click="deleteSelectedProducts" />
             </template>
         </Dialog>
     </div>
@@ -127,9 +115,7 @@
 import {onMounted, ref} from 'vue';
 import axios from "axios";
 import { FilterMatchMode } from 'primevue/api';
-
 import DataTable from 'primevue/datatable';
-
 import Column from 'primevue/column';
 import Button from 'primevue/button';
 import Toolbar from 'primevue/toolbar';
@@ -140,43 +126,101 @@ import InputNumber from 'primevue/inputnumber';
 import InputText from 'primevue/inputtext';
 
 
-
-
-
-
-
-
 const dt = ref();
 const products = ref([]);
+const categories = ref([]);
 const productDialog = ref(false);
 const deleteProductDialog = ref(false);
 const deleteProductsDialog = ref(false);
 const product = ref({});
 const selectedProducts = ref();
+const selectedProductsToDelete = ref([]);
 const filters = ref({
     'global': {value: null, matchMode: FilterMatchMode.CONTAINS},
 });
 const submitted = ref(false);
-
-
-
-onMounted(async () => {
-    try {
-        const response = await axios.get('http://127.0.0.1:8000/api/getProducts');
-        products.value = response.data
-    } catch (error) {
-        console.error('Axios Request Error:', error);
-    }
-});
-
-
-
 
 const formatCurrency = (value) => {
     if(value)
         return value.toLocaleString('en-US', {style: 'currency', currency: 'USD'});
     return;
 };
+
+onMounted(async () => {
+   getProducts();
+});
+
+const getProducts = async () => {
+    try {
+        const [productsResponse, categoriesResponse] = await Promise.all([
+            axios.get('http://127.0.0.1:8000/api/getProducts'),
+            axios.get('http://127.0.0.1:8000/api/getCategory'),
+        ]);
+        products.value = productsResponse.data.map(product => ({
+            ...product,
+            categoryName: '',
+        }));
+        categories.value = categoriesResponse.data;
+        mapCategoryNamesToProducts();
+    } catch (error) {
+        console.error('Axios İstek Hatası:', error);
+    }
+}
+const mapCategoryNamesToProducts = () => {
+    products.value.forEach(product => {
+        const categoryId = product.category_id;
+        const matchingCategory = categories.value.find(category => category.id === categoryId);
+        if (matchingCategory) {
+            product.categoryName = matchingCategory.name; // categoryName'yi matchingCategory'nin name özelliği ile güncelle
+        }
+    });
+};
+const deleteProduct = () => {
+    const productId  = product.value.id;
+    axios.delete(`http://127.0.0.1:8000/api/deleteProduct/${productId}`)
+        .then(response => {
+            console.log(response)
+        });
+    getProducts();
+    deleteProductDialog.value = false;
+};
+const confirmDeleteProduct = (prod) => {
+    product.value = prod;
+    deleteProductDialog.value = true;
+};
+const confirmDeleteSelected = () => {
+
+    selectedProductsToDelete.value = [...selectedProducts.value];
+    deleteSelectedProducts(selectedProductsToDelete.value);
+
+};
+const deleteSelectedProducts = (data) => {
+    const productIdsToDelete = data.map(product => product.id);
+
+    axios.delete('http://127.0.0.1:8000/api/bulkDelete', {
+        data: {
+            ids: productIdsToDelete
+        }
+    })
+        .then(response => {
+            console.log('Silme işlemi başarıyla tamamlandı:', response.data);
+            getProducts();
+        })
+        .catch(error => {
+            console.error('Silme işlemi sırasında bir hata oluştu:', error.response.data);
+        })
+        .finally(() => {
+            getProducts();
+        });
+};
+
+
+
+
+
+
+
+
 const openNew = () => {
     product.value = {};
     submitted.value = false;
@@ -213,16 +257,7 @@ const editProduct = (prod) => {
     product.value = {...prod};
     productDialog.value = true;
 };
-const confirmDeleteProduct = (prod) => {
-    product.value = prod;
-    deleteProductDialog.value = true;
-};
-const deleteProduct = () => {
-    products.value = products.value.filter(val => val.id !== product.value.id);
-    deleteProductDialog.value = false;
-    product.value = {};
-    toast.add({severity:'success', summary: 'Successful', detail: 'Product Deleted', life: 3000});
-};
+
 const findIndexById = (id) => {
     let index = -1;
     for (let i = 0; i < products.value.length; i++) {
@@ -233,26 +268,12 @@ const findIndexById = (id) => {
     }
     return index;
 };
-const createId = () => {
-    let id = '';
-    var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    for ( var i = 0; i < 5; i++ ) {
-        id += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    return id;
-}
+
 const exportCSV = () => {
     dt.value.exportCSV();
 };
-const confirmDeleteSelected = () => {
-    deleteProductsDialog.value = true;
-};
-const deleteSelectedProducts = () => {
-    products.value = products.value.filter(val => !selectedProducts.value.includes(val));
-    deleteProductsDialog.value = false;
-    selectedProducts.value = null;
-    toast.add({severity:'success', summary: 'Successful', detail: 'Products Deleted', life: 3000});
-};
+
+
 
 
 

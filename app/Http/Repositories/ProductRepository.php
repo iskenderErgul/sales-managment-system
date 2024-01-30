@@ -3,6 +3,7 @@
 namespace App\Http\Repositories;
 
 use App\Models\Product;
+use Illuminate\Http\Request;
 
 class ProductRepository
 {
@@ -15,4 +16,15 @@ class ProductRepository
 
 
     }
+    public function deleteProduct($id)
+    {
+        return Product::where('id',$id)->delete();
+    }
+
+    public function bulkDelete(Request $request)
+    {
+        $ids = $request->input('ids', []);
+        Product::whereIn('id', $ids)->delete();
+    }
 }
+

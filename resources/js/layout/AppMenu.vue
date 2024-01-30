@@ -13,7 +13,7 @@ const model = ref([
         items: [
             { label: 'Products', icon: 'pi pi-fw pi-book', to: '/sys/products' },
             { label: 'Orders', icon: 'pi pi-fw pi-shopping-bag', to: '/sys/orders' },
-            { label: 'Users', icon: 'pi pi-fw pi-user-plus', to: '/sys/users' },
+
             { label: 'Categories', icon: 'pi pi-fw pi-th-large', to: '/sys/categories' },
 
         ]

@@ -25,4 +25,13 @@ class ProductController extends Controller
         $product = $this->productRepository->getProduct($id);
         return response()->json($product);
     }
+
+    public function deleteProduct($id){
+        $product = $this->productRepository->deleteProduct($id);
+        return response()->json($product);
+    }
+    public  function bulkDelete(Request $request){
+        $products = $this->productRepository->bulkDelete($request);
+        return response()->json($products);
+    }
 }
