@@ -59,17 +59,17 @@ const categories = ref([
     {
         id: 1,
         category_id: 101,
-        category_name: 'Category A',
+        category_name: 'Categories A',
     },
     {
         id: 2,
         category_id: 102,
-        category_name: 'Category B',
+        category_name: 'Categories B',
     },
     {
         id: 3,
         category_id: 103,
-        category_name: 'Category C',
+        category_name: 'Categories C',
     },
 ]);
 

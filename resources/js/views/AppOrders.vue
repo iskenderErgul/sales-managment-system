@@ -129,7 +129,7 @@ const products = ref([
     {
         id: 1,
         user_id: '3',
-        name: 'Product A',
+        name: 'Products A',
         order_status: 'HAZIRLANIYOR',
         total_amount: 150.0,
         order_items : {
@@ -143,7 +143,7 @@ const products = ref([
     {
         id: 2,
         user_id: '4',
-        name: 'Product B',
+        name: 'Products B',
         order_status: 'KARGODA',
         total_amount: 75.5,
         order_items : {
@@ -157,7 +157,7 @@ const products = ref([
     {
         id: 3,
         user_id: '4',
-        name: 'Product C',
+        name: 'Products C',
         order_status: 'TESLİM EDİLDİ',
         total_amount: 75.5,
         order_items : {

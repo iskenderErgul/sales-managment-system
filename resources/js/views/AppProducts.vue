@@ -8,8 +8,8 @@
                     <Button label="Delete" icon="pi pi-trash" severity="danger" @click="confirmDeleteSelected" :disabled="!selectedProducts || !selectedProducts.length" />
                 </template>
                 <template #end>
-                    <FileUpload mode="basic" accept="image/*" :maxFileSize="1000000" label="Import" chooseLabel="Import" class="mr-2 inline-block" />
-                    <Button label="Export" icon="pi pi-upload" severity="help" @click="exportCSV($event)"  />
+                    <FileUpload mode="basic" accept="image/*" :maxFileSize="1000000" label="Import" disabled chooseLabel="Import" class="mr-2 inline-block" />
+                    <Button label="Export" icon="pi pi-upload" severity="help" disabled @click="exportCSV($event)"  />
                 </template>
             </Toolbar>
             <DataTable ref="dt" :value="products" v-model:selection="selectedProducts" dataKey="id"
@@ -25,6 +25,7 @@
                 <Column selectionMode="multiple" style="width: 3rem" :exportable="false"></Column>
                 <Column field="id" header="Id" sortable style="min-width:12rem"></Column>
                 <Column field="name" header="Name" sortable style="min-width:16rem"></Column>
+                <Column field="description" header="Description" sortable style="min-width:16rem"></Column>
                 <Column header="Image">
                     <template #body="slotProps">
                         <img :src="slotProps.data.image" :alt="slotProps.data.image" class="shadow-2 border-round" style="width: 64px" />
@@ -37,8 +38,6 @@
                 </Column>
                 <Column field="stock_quantity" header="Quantity" sortable style="min-width:10rem"></Column>
                 <Column field="categoryName" header="Category" sortable style="min-width:10rem"></Column>
-
-
                 <Column :exportable="false" style="min-width:8rem">
                     <template #body="slotProps">
                         <Button icon="pi pi-pencil" outlined rounded class="mr-2" @click="editProduct(slotProps.data)" />
@@ -48,11 +47,59 @@
             </DataTable>
         </div>
 
+
         <Dialog v-model:visible="productDialog" :style="{width: '450px'}" header="Product Details" :modal="true" class="p-fluid">
+
+        <div class="field">
+            <label for="productName" class="mb-3">Product Name</label>
+            <InputText id="productName" v-model="product.name" />
+        </div>
+        <div class="field">
+            <label for="productDescription" class="mb-3">Product Description</label>
+            <InputText id="productDescription" v-model="product.description" />
+        </div>
+
+        <div class="field">
+            <label for="productImage" class="mb-3">Product Image</label>
+            <FileUpload id="productImage" v-model="product.image" mode="basic" accept="image/*" :maxFileSize="1000000" label="Choose" chooseLabel="Choose" />
+        </div>
+
+        <div class="field">
+            <label class="mb-3">Category</label>
+            <div class="formgrid grid">
+                <div v-for="category in categories" :key="category.id" class="field-radiobutton col-6">
+                    <RadioButton :id="`category${category.id}`" name="category" :value="category.id" v-model="product.category_id" />
+                    <label :for="`category${category.id}`">{{ category.name }}</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="formgrid grid">
+            <div class="field col">
+                <label for="price">Price</label>
+                <InputNumber id="price" v-model="product.price" mode="currency" currency="USD" locale="en-US" />
+            </div>
+            <div class="field col">
+                <label for="stock_quantity">Quantity</label>
+                <InputNumber id="stock_quantity" v-model="product.stock_quantity" integeronly />
+            </div>
+        </div>
+        <template #footer>
+            <Button label="Cancel" icon="pi pi-times" text @click="hideDialog"/>
+            <Button label="Save" icon="pi pi-check" text @click="saveProduct" />
+        </template>
+    </Dialog>
+
+
+        <Dialog v-model:visible="productEditDialog" :style="{width: '450px'}" header="Edit Products" :modal="true" class="p-fluid">
 
             <div class="field">
                 <label for="productName" class="mb-3">Product Name</label>
                 <InputText id="productName" v-model="product.name" />
+            </div>
+            <div class="field">
+                <label for="productDescription" class="mb-3">Product Description</label>
+                <InputText id="productDescription" v-model="product.description" />
             </div>
 
             <div class="field">
@@ -60,12 +107,11 @@
                 <FileUpload id="productImage" v-model="product.image" mode="basic" accept="image/*" :maxFileSize="1000000" label="Choose" chooseLabel="Choose" />
             </div>
 
-
             <div class="field">
                 <label class="mb-3">Category</label>
                 <div class="formgrid grid">
                     <div v-for="category in categories" :key="category.id" class="field-radiobutton col-6">
-                        <RadioButton :id="`category${category.id}`" name="category" :value="category.name" v-model="product.category" />
+                        <RadioButton :id="`category${category.id}`" name="category" :value="category.id" v-model="product.category_id" />
                         <label :for="`category${category.id}`">{{ category.name }}</label>
                     </div>
                 </div>
@@ -77,15 +123,16 @@
                     <InputNumber id="price" v-model="product.price" mode="currency" currency="USD" locale="en-US" />
                 </div>
                 <div class="field col">
-                    <label for="quantity">Quantity</label>
-                    <InputNumber id="quantity" v-model="product.quantity" integeronly />
+                    <label for="stock_quantity">Quantity</label>
+                    <InputNumber id="stock_quantity" v-model="product.stock_quantity" integeronly />
                 </div>
             </div>
             <template #footer>
-                <Button label="Cancel" icon="pi pi-times" text @click="hideDialog"/>
-                <Button label="Save" icon="pi pi-check" text @click="saveProduct" />
+                <Button label="Cancel" icon="pi pi-times" text @click="productEditDialog=false"/>
+                <Button label="Save" icon="pi pi-check" text @click="editSaveProduct" />
             </template>
         </Dialog>
+
 
         <Dialog v-model:visible="deleteProductDialog" :style="{width: '450px'}" header="Confirm" :modal="true">
             <div class="confirmation-content">
@@ -98,7 +145,8 @@
             </template>
         </Dialog>
 
-        <Dialog v-model:visible="deleteProductsDialog" @confirm="confirmAction" :style="{width: '450px'}" header="Confirm" :modal="true">
+
+        <Dialog v-model:visible="deleteProductsDialog"  :style="{width: '450px'}" header="Confirm" :modal="true">
             <div class="confirmation-content">
                 <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem" />
                 <span v-if="product">Are you sure you want to delete the selected products?</span>
@@ -130,26 +178,31 @@ const dt = ref();
 const products = ref([]);
 const categories = ref([]);
 const productDialog = ref(false);
+const productEditDialog = ref(false);
 const deleteProductDialog = ref(false);
 const deleteProductsDialog = ref(false);
-const product = ref({});
 const selectedProducts = ref();
 const selectedProductsToDelete = ref([]);
-const filters = ref({
-    'global': {value: null, matchMode: FilterMatchMode.CONTAINS},
-});
+const filters = ref({'global': {value: null, matchMode: FilterMatchMode.CONTAINS},});
 const submitted = ref(false);
+const product = ref({
+    name : "",
+    description : "",
+    category_id : '',
+    image : '',
+    price : '',
+    stock_quantity : '',
 
+});
+
+onMounted(async () => {
+    getProducts();
+});
 const formatCurrency = (value) => {
     if(value)
         return value.toLocaleString('en-US', {style: 'currency', currency: 'USD'});
     return;
 };
-
-onMounted(async () => {
-   getProducts();
-});
-
 const getProducts = async () => {
     try {
         const [productsResponse, categoriesResponse] = await Promise.all([
@@ -213,14 +266,6 @@ const deleteSelectedProducts = (data) => {
             getProducts();
         });
 };
-
-
-
-
-
-
-
-
 const openNew = () => {
     product.value = {};
     submitted.value = false;
@@ -230,48 +275,41 @@ const hideDialog = () => {
     productDialog.value = false;
     submitted.value = false;
 };
-const saveProduct = () => {
-    submitted.value = true;
-
-    if (product.value.name.trim()) {
-        if (product.value.id) {
-            product.value.inventoryStatus = product.value.inventoryStatus.value ? product.value.inventoryStatus.value : product.value.inventoryStatus;
-            products.value[findIndexById(product.value.id)] = product.value;
-            toast.add({severity:'success', summary: 'Successful', detail: 'Product Updated', life: 3000});
-        }
-        else {
-            product.value.id = createId();
-            product.value.code = createId();
-            product.value.image = 'product-placeholder.svg';
-            products.value.push(product.value);
-            toast.add({severity:'success', summary: 'Successful', detail: 'Product Created', life: 3000});
-        }
-
-        productDialog.value = true;
-        product.value = {};
-
+const saveProduct = async () => {
+    try {
+        product.value.category_id = product.value.category_id;
+        const response = await axios.post('http://127.0.0.1:8000/api/addProduct', product.value);
+        console.log(response);
+        getProducts();
+        Object.keys(product.value).forEach(key => {
+            product.value[key] = '';
+        });
+        productDialog.value = false;
+        submitted.value = true;
+    } catch (error) {
+        console.error('Save Products işlemi sırasında bir hata oluştu:', error.response.data);
     }
-
 };
-const editProduct = (prod) => {
+const editProduct =  async (prod) => {
     product.value = {...prod};
-    productDialog.value = true;
-};
+    productEditDialog.value = true;
+    editSaveProduct(prod);
 
-const findIndexById = (id) => {
-    let index = -1;
-    for (let i = 0; i < products.value.length; i++) {
-        if (products.value[i].id === id) {
-            index = i;
-            break;
-        }
+};
+const editSaveProduct = async () => {
+    try {
+        const response = await axios.put(`http://127.0.0.1:8000/api/editProduct/${product.value.id}`, product.value);
+        console.log(response);
+        getProducts();
+
+    } catch (error) {
+        console.error('Edit Save işlemi sırasında bir hata oluştu:', error.response.data);
+
     }
-    return index;
+
 };
 
-const exportCSV = () => {
-    dt.value.exportCSV();
-};
+
 
 
 
