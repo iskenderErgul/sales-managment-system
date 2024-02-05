@@ -13,7 +13,7 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    protected  $productRepository;
+    protected ProductRepository $productRepository;
 
     public function __construct(ProductRepository  $productRepository)
     {
@@ -34,7 +34,6 @@ class ProductController extends Controller
 
     public function deleteProduct(DeleteProductRequest $request ,$id): JsonResponse
     {
-        dd($request->all());
         $product = $this->productRepository->deleteProduct($request ,$id);
         return response()->json($product);
     }

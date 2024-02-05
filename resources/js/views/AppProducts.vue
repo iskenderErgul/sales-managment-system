@@ -276,6 +276,7 @@ const hideDialog = () => {
     submitted.value = false;
 };
 const saveProduct = async () => {
+
     try {
         product.value.category_id = product.value.category_id;
         const response = await axios.post('http://127.0.0.1:8000/api/addProduct', product.value);
@@ -304,7 +305,6 @@ const editSaveProduct = async () => {
 
     } catch (error) {
         console.error('Edit Save işlemi sırasında bir hata oluştu:', error.response.data);
-
     }
 
 };
