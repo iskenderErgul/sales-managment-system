@@ -60,8 +60,8 @@
         </div>
 
         <div class="field">
-            <label for="productImage" class="mb-3">Product Image</label>
-            <FileUpload id="productImage" v-model="product.image" mode="basic" accept="image/*" :maxFileSize="1000000" label="Choose" chooseLabel="Choose" />
+            <label for="product.image" class="mb-3">Product Image</label>
+            <FileUpload id="product.image" v-model="product.image" mode="basic" accept="image/*" :maxFileSize="1000000" label="Choose" chooseLabel="Choose" />
         </div>
 
         <div class="field">
@@ -174,6 +174,7 @@ import InputNumber from 'primevue/inputnumber';
 import InputText from 'primevue/inputtext';
 
 
+
 const dt = ref();
 const products = ref([]);
 const categories = ref([]);
@@ -189,11 +190,12 @@ const product = ref({
     name : "",
     description : "",
     category_id : '',
-    image : '',
     price : '',
     stock_quantity : '',
+    image : '',
 
 });
+
 
 onMounted(async () => {
     getProducts();

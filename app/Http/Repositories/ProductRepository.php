@@ -34,11 +34,12 @@ class ProductRepository implements  ProductInterface
 
     public function addProduct(AddProductRequest $request)
     {
+
         return Product::create([
             'name' => $request->name,
             'category_id' => $request->category_id,
             'description' => $request->description,
-            'image' => null,
+            'image' => $request->input('image'),
             'price' => $request->price,
             'stock_quantity' => $request->stock_quantity
         ]);

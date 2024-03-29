@@ -28,17 +28,4 @@ class UploadImageServices
         File::copy($sourceImagePath, $targetImagePath);
     }
 
-    protected function save($width, $innerPath = null, $quality = 100): void
-    {
-        $tmpNotResizedImage = Image::make($this->image->getRealPath());
-
-        $path = 'app/public/' . $this->imagePath .'/'.$this->endFolderName. ($innerPath ? ('/' . $innerPath) : '');
-
-        if (!File::exists(storage_path($path)))
-            File::makeDirectory(storage_path($path), 0755, true, true);
-
-        $tmpNotResizedImage->resize($width, null, function ($constraint) {
-            $constraint->aspectRatio();
-        })->save(storage_path($path . '/' . $this->imageNameWithExtension), $quality);
-    }
 }

@@ -20,6 +20,7 @@ class AddProductRequest extends FormRequest
             'category_id' => 'required|integer',
             'price' => 'required|numeric',
             'stock_quantity' => 'required|integer',
+            'image' => '|image|mimes:jpeg,png,jpg,gif',
         ];
     }
 }
