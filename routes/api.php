@@ -35,9 +35,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/editCategory/{id}',[CategoryController::class,'editCategory']);
     Route::post('/addCategory',[CategoryController::class,'addCategory']);
 
+
+
     Route::get('/getOrders',[OrderController::class,'getAllOrders']);
-
-
     Route::get('/logout',[LoginController::class,'logout']);
 
 
