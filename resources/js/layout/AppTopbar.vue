@@ -68,7 +68,7 @@ const  logout = () => {
 
 <template>
     <div class="layout-topbar">
-        <router-link to="/hello" class="layout-topbar-logo">
+        <router-link to="/sys" class="layout-topbar-logo">
             <img :src="logoUrl" alt="logo" />
             <span>İSKENDER</span>
         </router-link>

@@ -13,8 +13,9 @@ const model = ref([
         items: [
             { label: 'Products', icon: 'pi pi-fw pi-book', to: '/sys/products' },
             { label: 'Orders', icon: 'pi pi-fw pi-shopping-bag', to: '/sys/orders' },
-
             { label: 'Categories', icon: 'pi pi-fw pi-th-large', to: '/sys/categories' },
+            { label: 'ChatGPT', icon: 'pi pi-comment', to: '/sys/chatGPT' },
+
 
         ]
     },

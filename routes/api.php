@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ChatGptController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Http\Request;
@@ -39,6 +40,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/getOrders',[OrderController::class,'getAllOrders']);
     Route::get('/logout',[LoginController::class,'logout']);
+
+
 
 
 });

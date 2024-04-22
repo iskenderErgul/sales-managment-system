@@ -8,9 +8,11 @@
     "devDependencies": {
         "@popperjs/core": "^2.11.6",
         "@vitejs/plugin-vue": "^4.5.0",
+        "autoprefixer": "^10.4.19",
         "axios": "^1.6.5",
         "bootstrap": "^5.2.3",
         "laravel-vite-plugin": "^1.0.0",
+        "postcss": "^8.4.38",
         "primeflex": "^3.3.1",
         "primeicons": "^6.0.1",
         "primevue": "3.39.0",

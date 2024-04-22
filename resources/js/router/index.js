@@ -7,6 +7,7 @@ import Users from "@/views/AppUsers.vue";
 import Categories from "@/views/AppCategories.vue";
 import Products from "@/views/AppProducts.vue";
 import store from "@/store/index.js";
+import ChatGPT from "@/views/ChatGPT.vue";
 
 const routes = [
 
@@ -39,6 +40,11 @@ const routes = [
                 component: Products,
                 name: 'products'
 
+            },
+            {
+                path : '/sys/chatGPT',
+                component: ChatGPT,
+                name: 'chatGPT'
             }
 
         ]
